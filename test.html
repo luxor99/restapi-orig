@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Tokens</h3>
+            PvyKTESA2t-NzGR1IjF74<br />
+            sIF99TRXF9-ARDKUDiOWf<br />
+            okyIQltIHo-xpAdMAVTxb<br />
+            BhTfhwKBnC-8zPr7kCH6L<br />
+            pXuRiJsIFV-JDSQtDfjAK<br />
+
+        </div>
+        <div class="col-md-9">
+            <h5><span id="curl_request"></span></h5>
+            <h3>Answer from server</h3>
+            <textarea class="form-control" rows="6" id="server_answer"></textarea>
+        </div>
+    </div>
+</div>
+<hr/>
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="email" class="col-sm-4 control-label">Token</label>
+                <div class="col-sm-8">
+                    <input type="text" value="PvyKTESA2t-NzGR1IjF74" class="form-control" id="token" placeholder="Your token" aria-describedby="basic-addon1">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-3">
+            <h4>POST /api/accounts/</h4>
+
+            <form class="form-horizontal" id="post_api_accounts" method="POST" action="api/accounts">
+                <div class="form-group">
+                    <label for="email" class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-8">
+                        <input name="email" class="form-control post_api_accounts_input" id="email" placeholder="Email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="col-sm-4 control-label">Password</label>
+                    <div class="col-sm-8">
+                        <input name="password" class="form-control post_api_accounts_input" id="password" placeholder="Password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-4 control-label">Name</label>
+                    <div class="col-sm-8">
+                        <input name="name" class="form-control post_api_accounts_input" id="name" placeholder="Password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="col-sm-4 control-label">Address</label>
+                    <div class="col-sm-8">
+                        <input name="address" class="form-control post_api_accounts_input" id="address" placeholder="Address">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="city" class="col-sm-4 control-label">City</label>
+                    <div class="col-sm-8">
+                        <input name="city" class="form-control post_api_accounts_input" id="city" placeholder="City">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="state" class="col-sm-4 control-label">State</label>
+                    <div class="col-sm-8">
+                        <input name="state" class="form-control post_api_accounts_input" id="state" placeholder="State">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="zip" class="col-sm-4 control-label">Zip</label>
+                    <div class="col-sm-8">
+                        <input name="zip" class="form-control post_api_accounts_input" id="zip" placeholder="Zip">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="country" class="col-sm-4 control-label">Country</label>
+                    <div class="col-sm-8">
+                        <input name="country" class="form-control post_api_accounts_input" id="country" placeholder="Country">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-offset-8 col-sm-10">
+                        <button type="submit" class="btn btn-default">Send</button>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+        <div class="col-md-3">
+            <h4>PUT /api/accounts/{app_id}</h4>
+            <form>
+            <div class="form-group">
+                <label for="app_id" class="col-sm-4 control-label">app_id</label>
+                <div class="col-sm-8">
+                    <input name="app_id" class="form-control" id="put_app_id" placeholder="app_id">
+                </div>
+            </div>
+            </form>
+            <br />
+            <hr/>
+            <br />
+            <form class="form-horizontal" id="put_api_accounts" method="PUT" action="api/accounts">
+                <div class="form-group">
+                    <label for="schools" class="col-sm-4 control-label">schools</label>
+                    <div class="col-sm-8">
+                        <input name="schools" class="form-control put_api_accounts_input" id="schools" placeholder="schools">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="location" class="col-sm-4 control-label">location</label>
+                    <div class="col-sm-8">
+                        <input name="location" class="form-control put_api_accounts_input" id="location" placeholder="location">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="size" class="col-sm-4 control-label">size</label>
+                    <div class="col-sm-8">
+                        <input name="size" class="form-control put_api_accounts_input" id="size" placeholder="size">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="age" class="col-sm-4 control-label">age</label>
+                    <div class="col-sm-8">
+                        <input name="age" class="form-control put_api_accounts_input" id="age" placeholder="age">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-8 col-sm-10">
+                        <button type="submit" class="btn btn-default">Send</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-md-3">
+            <h4>GET	/api/accounts/{app_id}</h4>
+            <form>
+                <div class="form-group">
+                    <label for="app_id" class="col-sm-4 control-label">app_id</label>
+                    <div class="col-sm-8">
+                        <input name="app_id" class="form-control" id="get_api_accounts_app_id_input" placeholder="app_id">
+                    </div>
+                </div>
+            </form>
+            <br />
+            <hr/>
+            <br />
+
+            <form class="form-horizontal" id="get_api_accounts_app_id" method="GET" action="api/accounts">
+            <div class="form-group">
+                <div class="col-sm-offset-8 col-sm-10">
+                    <button type="submit" class="btn btn-default">Send</button>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <h4>GET	/api/accounts/</h4>
+            <form class="form-horizontal" id="get_api_accounts" method="GET" action="api/accounts">
+                <div class="form-group">
+                    <div class="col-sm-offset-8 col-sm-10">
+                        <button type="submit" class="btn btn-default">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <script>
+        var host = '';
+        var curl = 'curl -H "Authorization: Bearer __token__" -H "Content-Type: application/json" http://opencart2.abcit.ru/api/accounts';
+
+        jQuery('document').ready(function(){
+
+            $('.post_api_accounts_input').change(function(){
+                // CURL -H "Authorization: Bearer 12345678900987654321-abc34135acde13f13530" -H "Content-Type: application/json" https://www.xxx.com/api/accounts
+                var str = curl.replace(/__token__/, $('#token').val()) + " -d '" + JSON.stringify($('#post_api_accounts').serializeObject()) + "' -X "+$(this).parent().parent().parent().attr('method');
+                $('#curl_request').html(str);
+            });
+
+            $('#post_api_accounts').submit(function(){
+               var  url = $(this).attr('action');
+               var  data = JSON.stringify($('#post_api_accounts').serializeObject());
+               var  method = $(this).attr('method');
+
+                $.ajax({
+                    dataType: "json",
+                    type: method,
+                    contentType: "application/json; charset=utf-8",
+                    url: url,
+                    data: data,
+                    success: showAnswerSuccess,
+                    error: showAnswerError,
+                });
+
+                return false;
+            });
+
+
+
+
+            $('.put_api_accounts_input').change(function(){
+                var app_id = '/' + $('#put_app_id').val();
+                var str = curl.replace(/__token__/, $('#token').val()) + app_id + " -d '" + JSON.stringify($('#put_api_accounts').serializeObject()) + "' -X "+$(this).parent().parent().parent().attr('method');
+                $('#curl_request').html(str);
+            });
+
+            $('#put_api_accounts').submit(function(){
+                var  app_id = '/' + $('#put_app_id').val();
+                var  url = $(this).attr('action') + app_id;
+                var  data = JSON.stringify($('#put_api_accounts').serializeObject());
+                var  method = $(this).attr('method');
+
+                $.ajax({
+                    dataType: "json",
+                    type: method,
+                    contentType: "application/json; charset=utf-8",
+                    url: url,
+                    data: data,
+                    success: showAnswerSuccess,
+                    error: showAnswerError,
+                });
+
+                return false;
+            });
+
+
+
+            $('#get_api_accounts_app_id_input').change(function(){
+                var app_id = '/' + $('#get_api_accounts_app_id_input').val();
+                var str = curl.replace(/__token__/, $('#token').val()) + app_id + "' -X GET";
+                $('#curl_request').html(str);
+            });
+
+            $('#get_api_accounts_app_id').submit(function(){
+                var  app_id = '/' + $('#get_api_accounts_app_id_input').val();
+                var  url = $(this).attr('action') + app_id;
+//                var  data = JSON.stringify($('#post_api_accounts').serializeObject());
+                var  method = $(this).attr('method');
+
+                $.ajax({
+                    dataType: "json",
+                    type: method,
+                    contentType: "application/json; charset=utf-8",
+                    url: url,
+//                    data: data,
+                    success: showAnswerSuccess,
+                    error: showAnswerError,
+                });
+
+                return false;
+            });
+
+
+            $('#get_api_accounts').submit(function(){
+                var  url = $(this).attr('action');
+//                var  data = JSON.stringify($('#post_api_accounts').serializeObject());
+                var  method = $(this).attr('method');
+
+                var str = curl.replace(/__token__/, $('#token').val()) + "' -X GET";
+                $('#curl_request').html(str);
+
+                $.ajax({
+                    dataType: "json",
+                    type: method,
+                    contentType: "application/json; charset=utf-8",
+                    url: url,
+//                    data: data,
+                    success: showAnswerSuccess,
+                    error: showAnswerError,
+                });
+
+                return false;
+            });
+
+
+
+        });
+
+    function showAnswerError(data) {
+       $('#server_answer').val(JSON.stringify(data.responseJSON));
+//       $('#server_answer').val(data.responseJSON);
+    }
+
+    function showAnswerSuccess(data) {
+        $('#server_answer').val(JSON.stringify(data));
+//       $('#server_answer').val(data.responseJSON);
+    }
+
+        $.fn.serializeObject = function()
+        {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+        $.ajaxSetup({
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + $('#token').val());
+            }
+        });
+
+    </script>
+
+
+</body>
+</html>
