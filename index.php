@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__.'/vendor/autoload.php';
-require_once __DIR__.'/config.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -8,13 +6,20 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Debug\ErrorHandler;
+use Dompdf\Dompdf;
 
-
+require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/config.php';
+$uploadConfig = require __DIR__.'/upload_config.php';
 
 $app = new Silex\Application();
 
 // Please set to false in a production environment
 $app['debug'] = true;
+
+foreach($uploadConfig as $key => $val) {
+    $app[$key] = $val;
+}
 
 //configure database connection
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
@@ -284,6 +289,133 @@ $app->post('/api/accounts/verifytoken', function (Request $request) use ($app) {
     }
 
     return $app->json(array('status' => '200', 'message' => 'Password successfully change'), 200);
+});
+
+
+
+$app->post('/api/accounts/addjoint', function (Request $request) use ($app) {
+
+    $constraint_data = array(
+        'token_id' => array(new Assert\NotBlank()),
+        'app_id' => array(new Assert\NotBlank()),
+        'name' => array(new Assert\NotBlank()),
+        'birthday' => array(new Assert\NotBlank(), new Assert\Regex(array('pattern' => '/^\d{4}-\d{2}-\d{2}$/', 'message' => 'Must be like YYYY-MM-DD'))),
+        'city' => array(new Assert\NotBlank()),
+        'country' => array(new Assert\NotBlank()),
+    );
+
+    $joints = $request->request->get('joints');
+
+    foreach($joints as $k => $joint) {
+        $joint = array(
+            'token_id' => $app['token_id'],
+            'app_id' => $joint['app_id'],
+            'name' => $joint['name'],
+            'birthday' => $joint['birthday'],
+            'city' => $joint['city'],
+            'country' => $joint['country'],
+        );
+        $constraint = new Assert\Collection($constraint_data);
+
+        $errors = $app['validator']->validate($joint, $constraint);
+
+        $birthDate = explode("-", $joint['birthday']);
+        if (count($birthDate) == 3) {
+            $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], $birthDate[0]))) > date("md")
+                ? ((date("Y") - $birthDate[0]) - 1)
+                : (date("Y") - $birthDate[0]));
+
+        }
+
+        if (count($errors) > 0 OR (isset($age) AND ($age < 18))) {
+            $errs = array();
+            foreach ($errors as $error) {
+                $errs[$error->getPropertyPath()] = $error->getMessage();
+            }
+
+            if (isset($age) AND ($age < 18)) {
+                $errs['birthday'] = 'Age must be > 18';
+            }
+
+            return $app->json(array('status' => '404', 'message' => 'Not valid data', 'errors' => $errs), 404);
+        }
+
+        try {
+            unset($joint['token_id']);
+            $app['db']->insert('jointusers', $joint);
+            $joint_ids[] = $app['db']->lastInsertId();
+        } catch(\Exception $e) {
+            return $app->json(array('status' => '500', 'message' => 'Internal Server Error'), 500);
+        }
+    }
+
+    return $app->json(array('status' => '201', 'ids' => $joint_ids), 201);
+});
+
+$app->post('/api/upload', function(Request $request) use ($app) {
+    if (!$files = $request->files->get('files')) {
+        return $app->json(array(
+            'status' => '404',
+            'message' => 'No data provided.'
+        ), 404);
+    }
+
+    $asserts = new Assert\All(array(
+        'constraints' => array(
+            new Assert\File(array(
+                'mimeTypes' => $app['mimeTypesAllowed'],
+                'maxSize' => $app['maxSize'],
+            ))
+        ),
+    ));
+
+    $errors = $app['validator']->validate($files, $asserts);
+
+    if (count($errors) > 0) {
+        return $app->json(array(
+            'status' => '403',
+            'message' => sprintf(
+                'Only allowed %s files with a size under %s.',
+                implode(', ', array_map(function($mimeType) {
+                    return substr($mimeType, strpos($mimeType, '/') + 1);
+                }, $app['mimeTypesAllowed'])), $app['maxSize']
+            )
+        ), 403);
+    }
+
+    try {
+        foreach((array) $files as $file) {
+            $fileMimeType = $file->getMimeType();
+            $fileName = sprintf('%d_%s.pdf', time(), preg_replace(
+                    $app['allowedCharsRegEx'], '', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)
+                )
+            );
+
+            if ($fileMimeType === 'application/pdf' || $fileMimeType === 'application/x-pdf') {
+                $file->move(UPLOAD_DIR, $fileName); 
+            } else {
+                $imageContents = sprintf('<img src="data:%s;base64,%s" style="max-width:100%%; max-height:100%%">',
+                   $fileMimeType, base64_encode(file_get_contents($file->getPathname()))
+                );
+
+                $dompdf = new Dompdf();
+                $dompdf->load_html($imageContents);
+                $dompdf->set_paper('a4', 'portrait');
+                $dompdf->render();
+
+                if (false === file_put_contents(UPLOAD_DIR.'/'.$fileName, $dompdf->output(array('compress' => 0)))) {
+                    throw new RuntimeException(sprintf('Impossible to write data on %s', UPLOAD_DIR));
+                }
+            }
+        }
+    } catch(RuntimeException $e) {
+        return $app->json(array('status' => '500', 'message' => 'Internal Server Error'), 500);
+    }
+
+    return $app->json(array(
+        'status' => '201',
+        'files_uploaded' => count($files)
+    ), 201);
 });
 
 ErrorHandler::register();
